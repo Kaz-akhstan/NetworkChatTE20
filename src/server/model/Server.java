@@ -16,7 +16,7 @@ public class Server {
 
     public void acceptClients()
     {
-        
+
     }
 
     public static void main(String[] args) {
