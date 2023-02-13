@@ -1,44 +1,44 @@
 package server.model;
 
+import client.model.ClientListener;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Server
 {
-    ArrayList<Socket> clients = new ArrayList<>();
     ServerSocket server;
-    public Server(int port)
+    public Server(ServerSocket server)
     {
-        try
-        {
-            ServerSocket server = new ServerSocket(port);
-            System.out.println("Server started");
+        this.server = server;
+    }
+    public void acceptClients()
+    {
+        try {
+            while(!server.isClosed())
+            {
+                Socket client = server.accept();
+                System.out.println("Client has connected");
+                ClientListener clientListener = new ClientListener(client);
+                Thread thread = new Thread(clientListener);
+                thread.start();
+            }
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
     }
-
-    public void acceptClients()
+    public void stopServer()
     {
-        for (Socket client : clients)
+        try
         {
-            try
-            {
-                client = server.accept();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            server.close();
         }
-    }
-
-    public static void main(String[] args)
-    {
-        Server s = new Server(1);
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
