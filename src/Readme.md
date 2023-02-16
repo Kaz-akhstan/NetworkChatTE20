@@ -10,4 +10,4 @@ Jag har börjat skapa strukturen för mvc. Jag har gjort ett enkelt Gui och bör
 Jag har fortsatt jobba på servern och börjat lite på klienten.
 
 ## 16-2-2023
-Jag har fortsatt jobba på servern och klient lyssnaren. 
+Jag har fortsatt jobba på servern och klientlyssnaren. 
