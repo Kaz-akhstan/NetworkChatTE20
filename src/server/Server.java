@@ -1,6 +1,4 @@
-package server.model;
-
-import client.model.ClientListener;
+package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,6 +11,7 @@ public class Server
     {
         this.server = server;
     }
+
     public void acceptClients()
     {
         try {
@@ -38,6 +37,15 @@ public class Server
         }
         catch (IOException e)
         {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            Server s = new Server(new ServerSocket(1));
+            s.acceptClients();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
