@@ -14,3 +14,6 @@ Jag har fortsatt jobba på servern och klientlyssnaren.
 
 ## 17-2-2023
 Omorganiserat och försökt fortsätta jobba på servern
+
+## 23-2-2023
+Jobbat på servern och klienten

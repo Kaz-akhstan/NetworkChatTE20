@@ -4,9 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientListener implements Runnable
-{
-    public static ArrayList<ClientListener> clients = new ArrayList<>();
+public class ClientListener implements Runnable {
+    public static ArrayList < ClientListener > clients = new ArrayList < > ();
     Socket client;
 
     BufferedReader br;
@@ -14,8 +13,7 @@ public class ClientListener implements Runnable
 
     String username;
 
-    public ClientListener(Socket client)
-    {
+    public ClientListener(Socket client) {
         this.client = client;
         try {
             clients.add(this);
@@ -29,8 +27,7 @@ public class ClientListener implements Runnable
         }
     }
 
-    void disconnectClient()
-    {
+    void disconnectClient() {
         clients.remove(this);
         sendMessage(username + " has disconnected");
     }
@@ -46,12 +43,10 @@ public class ClientListener implements Runnable
         }
     }
 
-    public void sendMessage(String message)
-    {
+    public void sendMessage(String message) {
         for (int i = 0; i < clients.size(); i++) {
             try {
-                if(!clients.get(i).username.equals(username))
-                {
+                if (!clients.get(i).username.equals(username)) {
                     clients.get(i).bw.write(message);
                     clients.get(i).bw.newLine();
                 }
@@ -63,11 +58,9 @@ public class ClientListener implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         String msg = null;
-        while (true)
-        {
+        while (true) {
             try {
                 msg = br.readLine();
                 sendMessage(msg);
