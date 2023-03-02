@@ -20,9 +20,9 @@ public class Server {
     }
     public void acceptClients()
     {
-        while(true)
+        while(!server.isClosed())
         {
-            Socket client = null;
+            Socket client;
             try {
                 client = server.accept();
                 clientList.add(client);

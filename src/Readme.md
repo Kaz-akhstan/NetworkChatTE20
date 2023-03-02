@@ -17,3 +17,6 @@ Omorganiserat och försökt fortsätta jobba på servern
 
 ## 23-2-2023
 Jobbat på servern och klienten
+
+## 02-03-2023
+Börjat implementera view och controller, modellen är ungefär klar

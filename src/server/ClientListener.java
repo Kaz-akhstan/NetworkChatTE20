@@ -10,6 +10,7 @@ public class ClientListener implements Runnable {
     private BufferedReader br;
     private PrintWriter pw;
     private String username;
+    private boolean isRunning = true;
 
     public ClientListener(Socket socket)
     {
@@ -27,6 +28,7 @@ public class ClientListener implements Runnable {
     }
 
     private void closeConnection(BufferedReader br, PrintWriter pw, Socket socket) {
+        this.isRunning = false;
         clients.remove(this);
         sendMessage("Client has disconnected");
         try {
@@ -54,13 +56,14 @@ public class ClientListener implements Runnable {
     @Override
     public void run() {
         String msg;
-        while (socket.isConnected())
+        while (socket.isConnected() && this.isRunning)
         {
             try {
                 msg = br.readLine();
                 sendMessage(msg);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("User disconnected");
+                closeConnection(br, pw, socket);
             }
         }
     }
