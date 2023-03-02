@@ -5,66 +5,60 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientListener implements Runnable {
-    public static ArrayList < ClientListener > clients = new ArrayList < > ();
-    Socket client;
+    public static ArrayList<ClientListener> clients = new ArrayList<>();
+    private Socket socket;
+    private BufferedReader br;
+    private PrintWriter pw;
+    private String username;
 
-    BufferedReader br;
-    BufferedWriter bw;
-
-    String username;
-
-    public ClientListener(Socket client) {
-        this.client = client;
+    public ClientListener(Socket socket)
+    {
+        this.socket = socket;
         try {
-            clients.add(this);
-            br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            bw = new BufferedWriter(new PrintWriter(client.getOutputStream(), true));
+            this.pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+            this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.username = br.readLine();
-            sendMessage(username + " has connected");
+            clients.add(this);
+            sendMessage("New Connection");
         } catch (IOException e) {
-            terminateListener(client, bw, br);
             e.printStackTrace();
+            closeConnection(br, pw, socket);
         }
     }
 
-    void disconnectClient() {
+    private void closeConnection(BufferedReader br, PrintWriter pw, Socket socket) {
         clients.remove(this);
-        sendMessage(username + " has disconnected");
-    }
-
-    void terminateListener(Socket client, BufferedWriter bw, BufferedReader br) {
-        disconnectClient();
+        sendMessage("Client has disconnected");
         try {
-            bw.close();
             br.close();
-            client.close();
+            pw.close();
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendMessage(String message) {
-        for (int i = 0; i < clients.size(); i++) {
+    private void sendMessage(String message) {
+        for (ClientListener client : clients) {
             try {
-                if (!clients.get(i).username.equals(username)) {
-                    clients.get(i).bw.write(message);
-                    clients.get(i).bw.newLine();
+                if (!client.username.equals(username)) {
+                    client.pw.println(message + "\n");
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                terminateListener(client, bw, br);
+                closeConnection(br, pw, socket);
             }
         }
     }
 
     @Override
     public void run() {
-        String msg = null;
-        while (true) {
+        String msg;
+        while (socket.isConnected())
+        {
             try {
                 msg = br.readLine();
                 sendMessage(msg);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

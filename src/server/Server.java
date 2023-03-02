@@ -3,40 +3,42 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
     ServerSocket server;
-    public Server(ServerSocket server) {
-        this.server = server;
-    }
+    ArrayList<Socket>clientList = new ArrayList<>();
 
-    public void acceptClients() {
+    public Server(int port)
+    {
         try {
-            while (!server.isClosed()) {
-                Socket client = server.accept();
-                System.out.println("Client has connected");
-                ClientListener clientListener = new ClientListener(client);
-                Thread thread = new Thread(clientListener);
-                thread.start();
-            }
+            server = new ServerSocket(port);
+            System.out.println("Server started");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void stopServer() {
-        try {
-            server.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void acceptClients()
+    {
+        while(true)
+        {
+            Socket client = null;
+            try {
+                client = server.accept();
+                clientList.add(client);
+
+                ClientListener cl = new ClientListener(client);
+                Thread thread = new Thread(cl);
+                thread.start();
+                System.out.println("Client connected");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static void main(String[] args) {
-        try {
-            Server s = new Server(new ServerSocket(1));
-            s.acceptClients();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Server s = new Server(5);
+        s.acceptClients();
     }
 }
