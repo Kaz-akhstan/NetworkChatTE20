@@ -1,6 +1,7 @@
 package client;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 
 public class ClientView {
     private JButton button1;
@@ -17,13 +18,23 @@ public class ClientView {
         return textArea1;
     }
 
-    public void setTextArea1(JTextArea textArea1) {
-        this.textArea1 = textArea1;
+    public void setTextArea1(String textArea1) {
+        this.textArea1.append(textArea1 + "\n");
     }
 
     private JTextField textField1;
     private JTextArea textArea1;
     private JPanel panel;
+    private JTextPane textPane1;
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void addSendListener(ActionListener actionListener)
+    {
+        button1.addActionListener(actionListener);
+    }
 
     public static void main(String[] args) {
         try {

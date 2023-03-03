@@ -19,4 +19,7 @@ Omorganiserat och försökt fortsätta jobba på servern
 Jobbat på servern och klienten
 
 ## 02-03-2023
-Börjat implementera view och controller, modellen är ungefär klar
+Börjat implementera view och client.Controller, modellen är ungefär klar
+
+## 03-03-2023
+Fixat så att kontrollern ansluter modellen och viewen för klienten
